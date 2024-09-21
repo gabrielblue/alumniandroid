@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "156637866642",
+    "project_id": "alumni-system-5edbd",
+    "storage_bucket": "alumni-system-5edbd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156637866642:android:cc16c237a55339462d144b",
+        "android_client_info": {
+          "package_name": "com.example.allumnisystem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtpCq9vsR4MwIhW5Z74A7fMV02XMBs9mM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
