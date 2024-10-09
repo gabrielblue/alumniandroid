@@ -12,7 +12,7 @@ sealed class Screens(val route: String) {
     data object ProfileScreen : Screens(route = "profile_screen")
 
     // Home screen
-    data object HomeScreen : Screens(route = "home_screen")  // Added
+    data object HomeScreen : Screens(route = "home_screen")
 
     // Job related screens
     data object JobsScreen : Screens(route = "jobs_screen")
@@ -21,8 +21,11 @@ sealed class Screens(val route: String) {
     data object JobApplicationScreen : Screens(route = "job_application_screen/{jobId}")
     data object JobApplicationDetailsScreen : Screens(route = "job_application_details_screen")
 
+    // View Job Applications screen
+    data object ViewJobApplicationsScreen : Screens(route = "view_job_applications_screen")  // Added
+
     // Add screen
-    data object AddScreen : Screens(route = "add_screen")  // Added
+    data object AddScreen : Screens(route = "add_screen")
 
     // Other screens
     data object SettingsScreen : Screens(route = "settings_screen")

@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.0"
+coilComposeVersion = "2.4.0"
 firebaseBom = "33.2.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -16,9 +17,11 @@ navigationRuntimeKtx = "2.8.0"
 firebaseFirestoreKtx = "25.1.0"
 navigationCompose = "2.8.0"
 uiTextGoogleFonts = "1.7.1"
+material = "1.12.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -41,6 +44,7 @@ androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navig
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

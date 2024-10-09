@@ -4,23 +4,25 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.example.allumnisystem.screen.AddScreen
 import com.example.allumnisystem.screen.DashboardScreen
 import com.example.allumnisystem.screen.ForgotPasswordScreen
-import com.example.allumnisystem.screen.JobApplicationDetailsScreen
 import com.example.allumnisystem.screen.JobApplicationScreen
 import com.example.allumnisystem.screen.JobDetailsScreen
-import com.example.allumnisystem.screen.JobManagementScreen
 import com.example.allumnisystem.screen.JobPostingScreen
+import com.example.allumnisystem.screen.JobsScreen
 import com.example.allumnisystem.screen.LoginScreen
 import com.example.allumnisystem.screen.ProfileCreationScreen
 import com.example.allumnisystem.screen.ProfileScreen
 import com.example.allumnisystem.screen.RegisterScreen
+import com.example.allumnisystem.screen.ViewJobApplicationsScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screens.LoginScreen.route // Start at LoginScreen
+        startDestination = Screens.DashboardScreen.route
     ) {
         // Login screen
         composable(Screens.LoginScreen.route) {
@@ -49,7 +51,34 @@ fun NavGraph(navController: NavHostController) {
 
         // Job Management screen
         composable(Screens.JobsScreen.route) {
-            JobManagementScreen(navController = navController)
+            JobsScreen(navController = navController)
+        }
+
+        // Job Details screen with a jobId parameter
+        composable(
+            route = Screens.JobDetailsScreen.route + "/{jobId}",
+            arguments = listOf(navArgument("jobId") { type = androidx.navigation.NavType.StringType })
+        ) { backStackEntry ->
+            val jobId = backStackEntry.arguments?.getString("jobId")
+            jobId?.let {
+                JobDetailsScreen(navController = navController, jobId = it)
+            }
+        }
+
+        // Job Application screen with a jobId parameter
+        composable(
+            route = Screens.JobApplicationScreen.route,
+            arguments = listOf(navArgument("jobId") { type = androidx.navigation.NavType.StringType })
+        ) { backStackEntry ->
+            val jobId = backStackEntry.arguments?.getString("jobId")
+            jobId?.let {
+                JobApplicationScreen(navController = navController, jobId = it)
+            }
+        }
+
+        // View Job Applications screen
+        composable(Screens.ViewJobApplicationsScreen.route) {  // Added
+            ViewJobApplicationsScreen(navController = navController)
         }
 
         // Profile screen
@@ -62,22 +91,9 @@ fun NavGraph(navController: NavHostController) {
             JobPostingScreen(navController = navController)
         }
 
-        // Job Details screen with a jobId parameter
-        composable(Screens.JobDetailsScreen.route + "/{jobId}") { backStackEntry ->
-            val jobId = backStackEntry.arguments?.getString("jobId") ?: return@composable
-            JobDetailsScreen(navController = navController, jobId = jobId)
-        }
-
-        // Job Application screen with a jobId parameter
-        composable(Screens.JobApplicationScreen.route + "/{jobId}") { backStackEntry ->
-            val jobId = backStackEntry.arguments?.getString("jobId") ?: return@composable
-            JobApplicationScreen(navController = navController, jobId = jobId)
-        }
-
-        // Job Application Details screen with an applicationId parameter
-        composable(Screens.JobApplicationDetailsScreen.route + "/{applicationId}") { backStackEntry ->
-            val applicationId = backStackEntry.arguments?.getString("applicationId") ?: return@composable
-            JobApplicationDetailsScreen(navController = navController, applicationId = applicationId)
+        // Add Screen
+        composable(Screens.AddScreen.route) {
+            AddScreen(navController = navController)
         }
     }
 }

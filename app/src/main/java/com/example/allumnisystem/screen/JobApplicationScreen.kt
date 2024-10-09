@@ -1,15 +1,32 @@
 package com.example.allumnisystem.screen
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.allumnisystem.utils.JobApplicationData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.allumnisystem.utils.JobApplicationData
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -17,21 +34,31 @@ fun JobApplicationScreen(navController: NavController, jobId: String) {
     var applicantName by remember { mutableStateOf("") }
     var applicantEmail by remember { mutableStateOf("") }
     var coverLetter by remember { mutableStateOf("") }
-
+    var cvUrl by remember { mutableStateOf("") }  // New field for CV URL
+    val coroutineScope = rememberCoroutineScope()
     val db = FirebaseFirestore.getInstance()
     val user = FirebaseAuth.getInstance().currentUser
 
     fun submitApplication() {
-        val jobApplication = JobApplicationData(
-            jobId = jobId,
-            applicantName = applicantName,
-            applicantEmail = applicantEmail,
-            coverLetter = coverLetter
-        )
+        coroutineScope.launch {
+            val jobApplication = JobApplicationData(
+                jobId = jobId,
+                applicantName = applicantName,
+                applicantEmail = applicantEmail,
+                coverLetter = coverLetter,
+                cvUrl = cvUrl  // Include CV URL
+            )
 
-        user?.let {
-            db.collection("users").document(user.uid).collection("jobApplications")
-                .add(jobApplication)
+            user?.let {
+                db.collection("jobApplications")
+                    .add(jobApplication)
+                    .addOnSuccessListener {
+                        navController.navigateUp()  // Go back after successful submission
+                    }
+                    .addOnFailureListener { e ->
+                        e.printStackTrace()
+                    }
+            }
         }
     }
 
@@ -64,6 +91,14 @@ fun JobApplicationScreen(navController: NavController, jobId: String) {
                     value = coverLetter,
                     onValueChange = { coverLetter = it },
                     label = { Text("Cover Letter") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                // New CV field
+                OutlinedTextField(
+                    value = cvUrl,
+                    onValueChange = { cvUrl = it },
+                    label = { Text("CV URL") },
                     modifier = Modifier.fillMaxWidth()
                 )
 

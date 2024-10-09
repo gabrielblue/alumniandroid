@@ -4,10 +4,33 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,7 +44,6 @@ import com.example.allumnisystem.R
 import com.example.allumnisystem.nav.Screens
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -144,29 +166,16 @@ fun LoginScreen(navController: NavController) {
                     Button(
                         onClick = {
                             if (email.isNotEmpty() && password.isNotEmpty()) {
-                                signIn(email, password, auth, navController, context,
+                                signIn(email, password, auth, navController,
                                     { user ->
-                                        val db = FirebaseFirestore.getInstance()
-                                        db.collection("users").document(user!!.uid).get()
-                                            .addOnSuccessListener { document ->
-                                                if (document.exists() && document.getBoolean("profileCompleted") == true) {
-                                                    navController.navigate(Screens.DashboardScreen.route) {
-                                                        popUpTo(Screens.LoginScreen.route) { inclusive = true }
-                                                    }
-                                                } else {
-                                                    navController.navigate(Screens.ProfileCreationScreen.route) {
-                                                        popUpTo(Screens.LoginScreen.route) { inclusive = true }
-                                                    }
-                                                }
-                                            }
+                                        navController.navigate(Screens.DashboardScreen.route)
                                     },
                                     { error ->
                                         errorMessage = error
-                                    }
-                                )
+                                    })
                             } else {
                                 Toast.makeText(
-                                    context,
+                                    navController.context,
                                     "Please enter both email and password",
                                     Toast.LENGTH_LONG
                                 ).show()
@@ -213,7 +222,6 @@ private fun signIn(
     password: String,
     auth: FirebaseAuth,
     navController: NavController,
-    context: android.content.Context,
     onSuccess: (FirebaseUser?) -> Unit,
     onFailure: (String) -> Unit
 ) {
@@ -222,16 +230,21 @@ private fun signIn(
             if (task.isSuccessful) {
                 val user = auth.currentUser
                 if (user != null && user.isEmailVerified) {
+                    Toast.makeText(
+                        navController.context,
+                        "Welcome ${user.email}",
+                        Toast.LENGTH_LONG
+                    ).show()
                     onSuccess(user)
                 } else {
                     auth.signOut()
                     val errorMessage = "Email not verified. Please verify your email."
-                    Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                    Toast.makeText(navController.context, errorMessage, Toast.LENGTH_LONG).show()
                     onFailure(errorMessage)
                 }
             } else {
                 val error = task.exception?.message ?: "Sign in failed"
-                Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+                Toast.makeText(navController.context, error, Toast.LENGTH_LONG).show()
                 onFailure(error)
             }
         }
