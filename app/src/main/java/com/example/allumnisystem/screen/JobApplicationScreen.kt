@@ -31,33 +31,41 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JobApplicationScreen(navController: NavController, jobId: String) {
+    val auth = FirebaseAuth.getInstance()
     var applicantName by remember { mutableStateOf("") }
     var applicantEmail by remember { mutableStateOf("") }
     var coverLetter by remember { mutableStateOf("") }
     var cvUrl by remember { mutableStateOf("") }  // New field for CV URL
     val coroutineScope = rememberCoroutineScope()
     val db = FirebaseFirestore.getInstance()
+    val currentUser = auth.currentUser
+    val userID = currentUser?.uid
     val user = FirebaseAuth.getInstance().currentUser
 
     fun submitApplication() {
         coroutineScope.launch {
-            val jobApplication = JobApplicationData(
-                jobId = jobId,
-                applicantName = applicantName,
-                applicantEmail = applicantEmail,
-                coverLetter = coverLetter,
-                cvUrl = cvUrl  // Include CV URL
-            )
+            val jobApplication = userID?.let {
+                JobApplicationData(
+                    jobId = jobId,
+                    userId = it,
+                    applicantName = applicantName,
+                    applicantEmail = applicantEmail,
+                    coverLetter = coverLetter,
+                    cvUrl = cvUrl  // Include CV URL
+                )
+            }
 
             user?.let {
-                db.collection("jobApplications")
-                    .add(jobApplication)
-                    .addOnSuccessListener {
-                        navController.navigateUp()  // Go back after successful submission
-                    }
-                    .addOnFailureListener { e ->
-                        e.printStackTrace()
-                    }
+                if (jobApplication != null) {
+                    db.collection("jobApplications")
+                        .add(jobApplication)
+                        .addOnSuccessListener {
+                            navController.navigateUp()  // Go back after successful submission
+                        }
+                        .addOnFailureListener { e ->
+                            e.printStackTrace()
+                        }
+                }
             }
         }
     }

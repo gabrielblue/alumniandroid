@@ -104,6 +104,9 @@ fun ProfileScreen(navController: NavController) {
                 }
             )
         },
+        bottomBar = {
+            BottomNav(navController = navController)
+        },
         content = { paddingValues ->
             LazyColumn(
                 modifier = Modifier

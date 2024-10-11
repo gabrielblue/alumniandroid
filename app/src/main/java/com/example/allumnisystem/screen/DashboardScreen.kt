@@ -111,7 +111,7 @@ fun BottomNav(navController: NavController) {
             selected = selectedItem == 0,
             onClick = {
                 selectedItem = 0
-                navController.navigate(Screens.HomeScreen.route)
+                navController.navigate(Screens.DashboardScreen.route)
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = MaterialTheme.colorScheme.onPrimary,
@@ -158,6 +158,7 @@ fun BottomNav(navController: NavController) {
 fun DashboardScreen(navController: NavController) {
     val auth = FirebaseAuth.getInstance()
     val currentUser = auth.currentUser
+    val userID = currentUser?.uid
     var isAdmin by remember { mutableStateOf(false) } // Track if user is admin
     var isLoading by remember { mutableStateOf(true) } // Track loading state
 
@@ -258,6 +259,41 @@ fun DashboardScreen(navController: NavController) {
                                     text = "Approve or reject job applications",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Icon(
+                                imageVector = Icons.Filled.ArrowForward,
+                                contentDescription = "View Applications",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
+                } else {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .clickable {
+                                navController.navigate("alumni_application/$userID")
+                            },
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        elevation = CardDefaults.cardElevation(8.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Column {
+                                Text(
+                                    text = "View My Job Applications",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                             }
                             Icon(

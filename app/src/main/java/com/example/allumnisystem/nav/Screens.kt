@@ -11,9 +11,6 @@ sealed class Screens(val route: String) {
     data object ProfileCreationScreen : Screens(route = "profile_creation_screen")
     data object ProfileScreen : Screens(route = "profile_screen")
 
-    // Home screen
-    data object HomeScreen : Screens(route = "home_screen")
-
     // Job related screens
     data object JobsScreen : Screens(route = "jobs_screen")
     data object JobPostingScreen : Screens(route = "job_posting_screen")
@@ -22,7 +19,8 @@ sealed class Screens(val route: String) {
     data object JobApplicationDetailsScreen : Screens(route = "job_application_details_screen")
 
     // View Job Applications screen
-    data object ViewJobApplicationsScreen : Screens(route = "view_job_applications_screen")  // Added
+    data object ViewJobApplicationsScreen : Screens(route = "view_job_applications_screen")
+    data object AlumniApplicationScreen : Screens(route = "alumni_application/{userId}")
 
     // Add screen
     data object AddScreen : Screens(route = "add_screen")

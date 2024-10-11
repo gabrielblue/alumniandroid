@@ -69,6 +69,9 @@ fun JobsScreen(navController: NavController, jobViewModel: JobViewModel = viewMo
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         },
+        bottomBar = {
+            BottomNav(navController = navController)
+        },
         content = { paddingValues ->
             Column(
                 modifier = Modifier

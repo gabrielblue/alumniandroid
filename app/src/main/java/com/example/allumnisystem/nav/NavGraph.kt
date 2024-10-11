@@ -2,10 +2,12 @@ package com.example.allumnisystem.nav
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.allumnisystem.screen.AddScreen
+import com.example.allumnisystem.screen.AlumniApplicationScreen
 import com.example.allumnisystem.screen.DashboardScreen
 import com.example.allumnisystem.screen.ForgotPasswordScreen
 import com.example.allumnisystem.screen.JobApplicationScreen
@@ -94,6 +96,16 @@ fun NavGraph(navController: NavHostController) {
         // Add Screen
         composable(Screens.AddScreen.route) {
             AddScreen(navController = navController)
+        }
+        
+        // Alumni my Application
+        composable(
+            route = Screens.AlumniApplicationScreen.route,
+            arguments = listOf(navArgument("userId") {type = NavType.StringType })
+        ) { backStackEntry ->
+            val userID = backStackEntry.arguments?.getString("userId") ?: ""
+            
+            AlumniApplicationScreen(navController = navController, userID = userID)
         }
     }
 }

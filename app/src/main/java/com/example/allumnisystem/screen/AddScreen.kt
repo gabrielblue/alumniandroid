@@ -53,6 +53,9 @@ fun AddScreen(navController: NavController) {
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
+        },
+        bottomBar = {
+            BottomNav(navController = navController)
         }
     ) { innerPadding ->
         AboutPageContent(Modifier.padding(innerPadding))

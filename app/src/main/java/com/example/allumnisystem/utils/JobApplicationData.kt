@@ -3,6 +3,7 @@ package com.example.allumnisystem.utils
 data class JobApplicationData(
     val id: String? = null,  // Firestore document ID
     val jobId: String = "",
+    val userId: String = "",
     val applicantName: String = "",
     val applicantEmail: String = "",
     val coverLetter: String = "",
