@@ -58,8 +58,18 @@ class JobViewModel : ViewModel() {
 
     // Add or edit a job
     fun addOrEditJob(jobId: String? = null) {
+        // Validate job duration input to prevent NumberFormatException
+        val durationDays = try {
+            jobDuration.value.toLongOrNull() ?: 30L // Default to 30 days if invalid
+        } catch (e: NumberFormatException) {
+            30L // Fallback to 30 days
+        }
+        
+        // Ensure minimum duration of 1 day and maximum of 365 days
+        val validDuration = durationDays.coerceIn(1L, 365L)
+        
         val currentTime = System.currentTimeMillis()
-        val expirationTime = currentTime + jobDuration.value.toLong() * 24 * 60 * 60 * 1000
+        val expirationTime = currentTime + validDuration * 24 * 60 * 60 * 1000
         val postedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(currentTime))
 
         val jobData = hashMapOf(
