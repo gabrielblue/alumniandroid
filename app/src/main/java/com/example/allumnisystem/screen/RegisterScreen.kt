@@ -154,13 +154,15 @@ fun RegisterScreen(navController: NavController) {
                                         password,
                                         navController,
                                         { user ->
-                                            successMessage = "Verification email sent to ${user?.email}"
+                                            successMessage = "Verification email sent to ${user?.email}. Please verify your email before logging in."
                                             Toast.makeText(
                                                 navController.context,
                                                 successMessage,
                                                 Toast.LENGTH_LONG
                                             ).show()
-                                            navController.navigate(Screens.ProfileCreationScreen.route) {
+                                            // Navigate back to login screen instead of profile creation
+                                            // User must verify email before proceeding
+                                            navController.navigate(Screens.LoginScreen.route) {
                                                 popUpTo(Screens.RegisterScreen.route) { inclusive = true }
                                             }
                                         },
