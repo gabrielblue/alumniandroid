@@ -13,3 +13,23 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Keystore files - NEVER commit these!
+*.keystore
+*.jks
+keystore.properties
+
+# Firebase config - replace with your own
+# google-services.json
+
+# Signing and deployment
+release/
+proguard/
+
+# IDE files
+*.swp
+*.swo
+*~
+
+# OS generated files
+Thumbs.db
